@@ -1,12 +1,122 @@
 /**
  * List handler for reservation resources
  */
+const service = require("./reservations.service.js");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+
+//---Middleware functions---//
+
+//checks to see reservation form has input data at all
+function validForm(req, res, next) {
+  const { data } = req.body;
+
+  if (!data) {
+    return next({
+      status: 400,
+      message: `You must submit your first name, last name, mobile number, reservation time and reservation date.`,
+    });
+  }
+  next();
+}
+
+//checks to see if the reservation includes the required fields to make a reservation 
+//First and Last name, mobile number, reservation time, reservtion date and a party size (people)
+function hasRequiredFields(req, res, next) {
+  const { data } = req.body;
+  const requiredFields = [
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+  ];
+  for (const field of requiredFields) {
+    if (!data[field]) {
+      return next({
+        status: 400,
+        message: `Reservation must include a ${field}`,
+      });
+    }
+  }
+  next();
+}
+
+//checks to make sure the date the user entered is an actual date
+//and that matches our database's format
+function isValidDate(req, res, next) {
+  const { data } = req.body;
+  const validDate = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+
+  if (!validDate.test(data.reservation_date)) {
+    return next({
+      status: 400,
+      message: "reservation_date must be a valid date.",
+    });
+  }
+  next();
+}
+
+
+//checks to make sure the time the user entered is an actual time
+//And that matches our database's format
+function isValidTime(req, res, next) {
+  const { data } = req.body;
+  const validTime =/^([0-1]?[0-9]|2[0-4]):([0-5][0-9])(:[0-5][0-9])?$/;
+
+  if (!validTime.test(data.reservation_time)) {
+    return next({
+      status: 400,
+      message: "reservation_time must be a valid time.",
+    });
+  }
+  next();
+}
+
+//checks to make sure that party size (amount of people for reservation) is a number
+function isValidPartySize(req, res, next) {
+  const { data } = req.body;
+  if (!Number.isInteger(data.people)) {
+    return next({
+      status: 400,
+      message: "people must be a number",
+    });
+  }
+  next();
+}
+
+
+//---Router functions---//
+
 async function list(req, res) {
-  res.json({
-    data: [],
-  });
+  let date = req.query.date;
+
+  if (date){
+    const data = await service.listReservationsOnDate(date);
+    res.json({ data });
+  }
+  else {
+    const data = await service.list();
+    res.json({ data });
+  }
+
+
+
+}
+
+async function create(req, res) {
+  const createdReservation = await service.create(req.body.data);
+  res.status(201).json({ data: createdReservation });
 }
 
 module.exports = {
-  list,
+  list: asyncErrorBoundary(list),
+  create: [
+    validForm,
+    hasRequiredFields,
+    isValidPartySize,
+    isValidDate,
+    isValidTime,
+    asyncErrorBoundary(create),
+  ],
 };
