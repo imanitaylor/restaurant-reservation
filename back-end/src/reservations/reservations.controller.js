@@ -58,6 +58,20 @@ function isValidDate(req, res, next) {
 }
 
 
+//checks to see if the selected date is a tuesday, sends error if a tuesday
+function isNotTuesday(req, res, next){
+  const { data } = req.body;
+  const date = new Date(`${data.reservation_date} ${data.reservation_time}`);
+  const dayOfWeek = date.getDay();
+  if (dayOfWeek === 2){
+    return next({
+      status: 400,
+      message: "The restaurant is closed on Tuesdays. Please pick another day.",
+  })
+}
+next();
+}
+
 //checks to make sure the time the user entered is an actual time
 //And that matches our database's format
 function isValidTime(req, res, next) {
@@ -116,6 +130,7 @@ module.exports = {
     hasRequiredFields,
     isValidPartySize,
     isValidDate,
+    isNotTuesday,
     isValidTime,
     asyncErrorBoundary(create),
   ],
