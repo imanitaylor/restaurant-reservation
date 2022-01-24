@@ -101,6 +101,22 @@ function isValidTime(req, res, next) {
   next();
 }
 
+//checks is reservations is after 10:30 AM but before 9:30 PM, if so then send error message
+function isRestaurantOpen(req, res, next){
+  const { data } = req.body;
+  const reservationTime = parseInt(((data.reservation_time).slice(0,2)) + ((data.reservation_time).slice(3)));
+
+  if (reservationTime < 1030 || reservationTime > 2130){
+    return next({
+      status: 400,
+      message: "Reservation time must be when the restaurant is open. Please select a time after 10:30 AM and before 9:30 PM (an hour before we close).",
+    });
+
+  }
+  next();
+}
+
+
 //checks to make sure that party size (amount of people for reservation) is a number
 function isValidPartySize(req, res, next) {
   const { data } = req.body;
@@ -147,6 +163,7 @@ module.exports = {
     isNotTuesday,
     isNotInPast,
     isValidTime,
+    isRestaurantOpen,
     asyncErrorBoundary(create),
   ],
 };
