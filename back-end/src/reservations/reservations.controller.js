@@ -72,6 +72,20 @@ function isNotTuesday(req, res, next){
 next();
 }
 
+//checks to see if the selected date is in the future
+function isNotInPast(req, res, next){
+  const { data } = req.body;
+  const date = new Date(`${data.reservation_date} ${data.reservation_time}`);
+  const today = new Date();
+  if (date < today){
+    return next({
+      status: 400,
+      message: "Please only pick a reservation day and time in the future.",
+  })
+}
+next();
+}
+
 //checks to make sure the time the user entered is an actual time
 //And that matches our database's format
 function isValidTime(req, res, next) {
@@ -131,6 +145,7 @@ module.exports = {
     isValidPartySize,
     isValidDate,
     isNotTuesday,
+    isNotInPast,
     isValidTime,
     asyncErrorBoundary(create),
   ],
