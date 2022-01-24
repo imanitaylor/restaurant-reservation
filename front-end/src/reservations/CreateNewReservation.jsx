@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-
+import ErrorAlert from "../layout/ErrorAlert";
 /*
 allows the user to create a new reservation with the restaurant
 
@@ -22,10 +22,11 @@ function CreateNewReservation() {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 0,
+    people: "",
   };
 
   const [formData, setFormData] = useState({ ...initialFormState });
+  const [errorMessage, setErrorMessage] = useState(null);
   const history = useHistory();
 
   const handleChange = ({ target }) => {
@@ -35,18 +36,26 @@ function CreateNewReservation() {
     });
   };
 
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
-     createReservation({...formData, people: Number(formData.people)})
-      .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
-      .catch(console.error);
-      setFormData({ ...initialFormState });
-  };
-
+    const ac = new AbortController();
+    try {
+      await createReservation(
+        { ...formData, people: Number(formData.people) },
+        ac.signal
+      );
+      history.push(`/dashboard?date=${formData.reservation_date}`);
+    } catch (error) {
+      setErrorMessage(error);
+    }
+    
+    return () => ac.abort();
+  }
 
   return (
     <div>
-      <h1>Create New Reservtion</h1>
+      <h1>Create A New Reservation</h1>
+      <ErrorAlert error={errorMessage} />
       <form onSubmit={handleSubmit}>
         <div className="row">
           <label htmlFor="first_name" className="col">
