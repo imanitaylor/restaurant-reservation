@@ -89,3 +89,38 @@ export async function listReservations(params, signal) {
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * Creates and saves a new table to the database.
+ * Takes in a table from the user
+ * @param table
+ *  the table to save
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<table>}
+ *  a promise that resolves the saved table.
+ */
+ export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: table}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
+ * Retrieves all existing table.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
+ */
+
+ export async function listTables(tables, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(tables).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, [])
+}
