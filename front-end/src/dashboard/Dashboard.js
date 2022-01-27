@@ -56,7 +56,7 @@ function Dashboard({ date }) {
             <td>{formatAsTime(reservation_time)}</td>
             <td>{reservation_date}</td>
             <td>{people}</td>
-            <a type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</a>
+            <td><a type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</a></td>
             </tr>
         ));
 
