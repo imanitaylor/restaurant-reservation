@@ -130,6 +130,25 @@ function isValidPartySize(req, res, next) {
 }
 
 
+//checks if this reservation exists
+async function reservationExists(req, res, next) {
+  const { reservationId } = req.params;
+  const reservation = await service.read(reservationId);
+
+  //if reservation exist then stores that reservation in local variable and pass it to the next function
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+
+  //if not then pass an error to the user
+  return next({
+    status: 404,
+    message: "reservation cannot be found.",
+  });
+}
+
+
 //---Router functions---//
 
 async function list(req, res) {
@@ -153,6 +172,17 @@ async function create(req, res) {
   res.status(201).json({ data: createdReservation });
 }
 
+
+
+//passes a local variable to read a reservation
+async function read(req, res, next) {
+  const { reservation } = res.locals;
+  const data = await service.read(reservation.reservation_id);
+  res.status(200).json({ data });
+  
+}
+
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -166,4 +196,8 @@ module.exports = {
     isRestaurantOpen,
     asyncErrorBoundary(create),
   ],
+  read:[
+    reservationExists,
+    asyncErrorBoundary(read),
+  ]
 };
