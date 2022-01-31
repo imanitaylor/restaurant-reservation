@@ -56,7 +56,7 @@ function Dashboard({ date }) {
             <td>{formatAsTime(reservation_time)}</td>
             <td>{reservation_date}</td>
             <td>{people}</td>
-            <td><a type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</a></td>
+            <td><button type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</button></td>
             </tr>
         ));
 
@@ -78,12 +78,12 @@ function Dashboard({ date }) {
           );
 
 
-          const tableRows = tables.map(({table_id, table_name, capacity}, index) => (
+          const tableRows = tables.map(({table_id, table_name, capacity, reservation_id}, index) => (
             <tr key={index}>
               <td>{table_id}</td>
                 <td>{table_name}</td>
                 <td>{capacity}</td>
-                <td></td>
+                <td>{reservation_id ? "Occupied" : "Free"}</td>
             </tr>
             ));
 
