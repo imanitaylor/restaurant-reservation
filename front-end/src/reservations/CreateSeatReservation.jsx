@@ -7,7 +7,7 @@ function CreateSeatReservation() {
     const history = useHistory();
     const [error, setError] = useState(null);
     const [tables, setTables] = useState([]);
-    const {reservationId} = useParams();
+    const {reservation_id} = useParams();    
     const initialFormState = {
         table_name: "",
       };
@@ -20,13 +20,15 @@ function CreateSeatReservation() {
       };
     
 
+
+
     async function handleSubmit(event) {
         event.preventDefault();
         const ac = new AbortController();
         setError(null);
         try {
           await updateTable(
-            reservationId, formData.value,
+            reservation_id, formData.table_id,
             ac.signal
           );
           history.push(`/dashboard`);
@@ -65,11 +67,11 @@ function CreateSeatReservation() {
                 id="table_id" 
                 name="table_id" 
                 onChange={handleChange} 
-                value={formData.table_id}
+                required
                 >
                    <option value="">-- Select an Option --</option>
                   {tables.map(({table_id, table_name, capacity}) => (
-                    <option value={table_id}>{table_name} - {capacity}</option>
+                    <option key={table_id} value={table_id}>{table_name} - {capacity}</option>
                   ))}
                 </select>
                 </label>

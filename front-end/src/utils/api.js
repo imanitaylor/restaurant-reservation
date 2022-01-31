@@ -130,7 +130,7 @@ export async function listReservations(params, signal) {
  * This updates a table and a reservation.
  * The reservation is seated at a specific table
  * Takes in a reservation from the user
- * @param reservationId
+ * @param reservation_id
  *  the reservation that is to be seated
  * @param tableId
  * the table that is being used, the reservation will occupy
@@ -139,12 +139,12 @@ export async function listReservations(params, signal) {
  * @returns {Promise<table>}
  *  a promise that resolves the saved table.
  */
- export async function updateTable(reservationId, tableId, signal) {
+ export async function updateTable(reservation_id, tableId, signal) {
   const url = `${API_BASE_URL}/tables/${tableId}/seat`;
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data: {reservation_id: reservationId} }),
+    body: JSON.stringify({data: {reservation_id} }),
     signal,
   };
   return await fetchJson(url, options);
