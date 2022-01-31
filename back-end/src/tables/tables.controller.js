@@ -13,7 +13,7 @@
     if (!data) {
       return next({
         status: 400,
-        message: `You must include a table name and capacity.`,
+        message: `You must include information in the form.`,
       });
     }
     next();
@@ -63,6 +63,75 @@ function isValidCapacity(req, res, next) {
     next();
   }
 
+
+//to make sure that the table parameter has a matching id to a table in the database
+async function tableExists(req, res, next) {
+  const { tableId } = req.params;
+  const table = await service.read(tableId);
+  if (table) {
+    res.locals.table = table;
+    return next();
+  }
+  return next({ status: 404, message: "${table_id} cannot be found." });
+}
+
+
+
+//to make sure that the reservation parameter has a matching id to a reservation in the database
+async function reservationExists(req, res, next) {
+  const { reservation_id } = req.body.data;
+  if (!reservation_id) {
+    return next({
+      status: 400,
+      message: "please include a reservation_id",
+    });
+  }
+
+  const reservation = await service.readReservation(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  } else {
+    return next({
+      status: 404,
+      message: `${reservation_id} cannot be found.`,
+    });
+  }
+}
+
+
+//makes sure that the table has enough capacity for the reservations required amount of seats
+function sufficientCapacity (req, res, next){
+  const capacity = res.locals.table.capacity;
+  const people = res.locals.reservation.people;
+
+  if (capacity < people) {
+    return next({
+      status: 400,
+      message: "The party size is greater than the table capacity. Please select another table",
+    });
+  }
+  next();
+}
+
+//checks to see if table is occupied
+function isOccupied (req, res, next){
+  const occupied = res.locals.table.reservation_id;
+  if (occupied) {
+    return next({
+      status: 400,
+      message: `Table ${res.locals.table.table_id} is currently occupied. Please select another table.`,
+    });
+  }
+  next();
+}
+
+
+
+
+
+
+
   //---Router functions---//
 
   async function list(req, res) {
@@ -78,6 +147,23 @@ function isValidCapacity(req, res, next) {
   }
 
 
+
+//PUT, updating an existing table
+async function update(req, res) {
+  const { reservation_id } = req.body.data;
+  const table_id = res.locals.table.table_id
+  const data = await service.update(reservation_id, table_id);
+  res.status(200).json({ data });
+}
+
+async function read(req, res, next) {
+  const { table } = res.locals;
+  const data = await service.read(table.table_id);
+  res.status(200).json({ data });
+  
+}
+
+
   module.exports = {
     list: asyncErrorBoundary(list),
     create:[
@@ -86,5 +172,13 @@ function isValidCapacity(req, res, next) {
         isValidCapacity,
         isValidTableName,
         asyncErrorBoundary(create),
+    ],
+    update: [
+      validForm,
+      tableExists,
+      reservationExists,
+      sufficientCapacity,
+      isOccupied,
+      asyncErrorBoundary(update),
     ]
   }
