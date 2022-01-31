@@ -20,8 +20,16 @@ function listReservationsOnDate(date) {
     .orderBy("reservation_time");
 }
 
+
+//GET method to read a reservation for a specific reservationId
+function read(reservationId) {
+  return knex("reservations").where({ reservation_id: reservationId }).first();
+}
+
+
 module.exports = {
   list,
   listReservationsOnDate,
   create,
+  read,
 };

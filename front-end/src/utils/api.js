@@ -89,3 +89,63 @@ export async function listReservations(params, signal) {
   };
   return await fetchJson(url, options);
 }
+
+/**
+ * Creates and saves a new table to the database.
+ * Takes in a table from the user
+ * @param table
+ *  the table to save
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<table>}
+ *  a promise that resolves the saved table.
+ */
+ export async function createTable(table, signal) {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: table}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+/**
+ * Retrieves all existing table.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
+ */
+
+ export async function listTables(tables, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  Object.entries(tables).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, [])
+}
+
+
+/**
+ * This updates a table and a reservation.
+ * The reservation is seated at a specific table
+ * Takes in a reservation from the user
+ * @param reservation_id
+ *  the reservation that is to be seated
+ * @param tableId
+ * the table that is being used, the reservation will occupy
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<table>}
+ *  a promise that resolves the saved table.
+ */
+ export async function updateTable(reservation_id, tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: {reservation_id} }),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
