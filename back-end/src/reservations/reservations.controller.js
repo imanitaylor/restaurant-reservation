@@ -144,7 +144,7 @@ async function reservationExists(req, res, next) {
   //if not then pass an error to the user
   return next({
     status: 404,
-    message: "reservation cannot be found.",
+    message: `${reservationId} cannot be found`,
   });
 }
 
@@ -181,7 +181,6 @@ async function read(req, res, next) {
   res.status(200).json({ data });
   
 }
-
 
 module.exports = {
   list: asyncErrorBoundary(list),
