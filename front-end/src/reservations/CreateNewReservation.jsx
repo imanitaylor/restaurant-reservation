@@ -39,6 +39,7 @@ function CreateNewReservation() {
   async function handleSubmit(event) {
     event.preventDefault();
     const ac = new AbortController();
+    setErrorMessage(null);
     try {
       await createReservation(
         { ...formData, people: Number(formData.people) },

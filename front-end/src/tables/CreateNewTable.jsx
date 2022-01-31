@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 
 function CreateNewTable() {
         const initialFormState = {
             table_name: "",
-            capacity: 1,
+            capacity: "",
           };
         
           const [formData, setFormData] = useState({ ...initialFormState });
-          const [errorMessage, setErrorMessage] = useState(null);
+          const [error, setError] = useState(null);
           const history = useHistory();
         
           const handleChange = ({ target }) => {
@@ -23,6 +24,7 @@ function CreateNewTable() {
           async function handleSubmit(event) {
             event.preventDefault();
             const ac = new AbortController();
+            setError(null);
             try {
               await createTable(
                 { ...formData, capacity: Number(formData.capacity) },
@@ -30,7 +32,7 @@ function CreateNewTable() {
               );
               history.push(`/dashboard`);
             } catch (error) {
-              setErrorMessage(error);
+              setError(error);
             }
             
             return () => ac.abort();
@@ -39,6 +41,7 @@ function CreateNewTable() {
           return (
             <div>
               <h1>Create A New Table</h1>
+              <ErrorAlert error={error} />
               <form onSubmit={handleSubmit}>
                 <div className="row">
                   <label htmlFor="table_name" className="col">
@@ -76,7 +79,7 @@ function CreateNewTable() {
                   <button
                     type="button"
                     className="btn btn-secondary m-2"
-                    onClick={() => history.push("/")}
+                    onClick={() => history.goBack()}
                   >
                     Cancel
                   </button>
