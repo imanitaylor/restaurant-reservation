@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
-import { listTables } from "../utils/api";
+import { listTables, deleteTableReservation } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { previous, next, today, formatAsTime } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -46,6 +46,40 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
+  // const handleDelete = (tableId) => {
+  //   const result = window.confirm(
+  //     "Is this table ready to seat new guests? \n\nThis can not be undone."
+  //   );
+  //   if (result === true) {
+  //     deleteTable(tableId).then(history.push("/"));
+  //   }
+  // };
+
+
+  async function handleDelete(tableId) {
+    const ac = new AbortController();
+    setError(null);
+
+    const result = window.confirm(
+      "Is this table ready to seat new guests? \n\nThis can not be undone."
+    );
+
+if (result === true) {
+
+  try {
+      await deleteTableReservation(
+        tableId,
+        ac.signal
+      );
+      loadDashboard();
+    } catch (error) {
+      setError(error);
+    }
+  }
+    
+    return () => ac.abort();
+  }
+
         
       const reservsRows = reservations.map(({reservation_id, first_name, last_name, mobile_number, reservation_time, reservation_date, people}, index) => (
         <tr key={index}>
@@ -56,7 +90,7 @@ function Dashboard({ date }) {
             <td>{formatAsTime(reservation_time)}</td>
             <td>{reservation_date}</td>
             <td>{people}</td>
-            <td><button type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</button></td>
+            <td><a type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</a></td>
             </tr>
         ));
 
@@ -78,12 +112,13 @@ function Dashboard({ date }) {
           );
 
 
-          const tableRows = tables.map(({table_id, table_name, capacity, reservation_id}, index) => (
+          const tableRows = tables.map((table, index) => (
             <tr key={index}>
-              <td>{table_id}</td>
-                <td>{table_name}</td>
-                <td>{capacity}</td>
-                <td>{reservation_id ? "Occupied" : "Free"}</td>
+              <td>{table.table_id}</td>
+                <td>{table.table_name}</td>
+                <td>{table.capacity}</td>
+                <td data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</td>
+                <td> {table.reservation_id && <button type="button" data-table-id-finish={table.table_id} onClick={() => handleDelete(table.table_id)}>Finish</button>}</td>
             </tr>
             ));
 
@@ -96,6 +131,7 @@ function Dashboard({ date }) {
                   <th>Table Name</th>
                   <th>Capacity</th>
                   <th>Status</th>
+                  <th>Table Completion</th>
                 </tr>
               </thead>
               <tbody>{tableRows}</tbody>
