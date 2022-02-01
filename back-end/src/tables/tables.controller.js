@@ -72,7 +72,7 @@ async function tableExists(req, res, next) {
     res.locals.table = table;
     return next();
   }
-  return next({ status: 404, message: "${table_id} cannot be found." });
+  return next({ status: 404, message: `${tableId} cannot be found.` });
 }
 
 
@@ -120,12 +120,23 @@ function isOccupied (req, res, next){
   if (occupied) {
     return next({
       status: 400,
-      message: `Table ${res.locals.table.table_id} is currently occupied. Please select another table.`,
+      message: `Table ${res.locals.table.table_id} is occupied.`,
     });
   }
   next();
 }
 
+//checks to see if table is not occupied
+function isNotOccupied (req, res, next){
+  const occupied = res.locals.table.reservation_id;
+  if (!occupied) {
+    return next({
+      status: 400,
+      message: `Table ${res.locals.table.table_id} is not occupied.`,
+    });
+  }
+  next();
+}
 
 
 
@@ -164,6 +175,14 @@ async function read(req, res, next) {
 }
 
 
+//DELETE method. will delete the reservation for a specific table
+async function deleteTableReservation(req, res) {
+  const { tableId } = req.params;
+  const data = await service.delete(tableId);
+  res.status(200).json({ data });
+}
+
+
   module.exports = {
     list: asyncErrorBoundary(list),
     create:[
@@ -180,5 +199,7 @@ async function read(req, res, next) {
       sufficientCapacity,
       isOccupied,
       asyncErrorBoundary(update),
-    ]
+    ],
+    delete: [tableExists, isNotOccupied, asyncErrorBoundary(deleteTableReservation)],
+
   }

@@ -39,10 +39,19 @@ function readReservation(reservationId) {
       .first();
 }
 
+function deleteTableReservation(tableId) {
+  return knex("tables").where({ table_id: tableId })
+  .update({ reservation_id: null })
+  .returning("*")
+
+}
+
+
 module.exports = {
-list,
+list, 
 create,
 update,
 read,
 readReservation,
+delete: deleteTableReservation,
 }

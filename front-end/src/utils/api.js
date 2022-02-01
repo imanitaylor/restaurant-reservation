@@ -149,3 +149,25 @@ export async function listReservations(params, signal) {
   };
   return await fetchJson(url, options);
 }
+
+
+
+/**
+ * This deletes a reservation_id from a table once the reservation is finished
+ * @param tableId
+ * the table that is being used, the reservation will occupy
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<table>}
+ *  a promise that resolves the saved table.
+ */
+ export async function deleteTableReservation(tableId, signal) {
+  const url = `${API_BASE_URL}/tables/${tableId}/seat`;
+  const options = {
+    method: "DELETE",
+    headers,
+    body: JSON.stringify({data: {}}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
