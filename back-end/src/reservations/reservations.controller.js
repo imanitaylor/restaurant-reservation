@@ -149,6 +149,42 @@ async function reservationExists(req, res, next) {
 }
 
 
+async function validStatus (req, res, next) {
+  const status = req.body.data.status;
+
+  if(status && status !== "booked"){
+    return next({
+      status: 400,
+      message: `Reservation is already ${status}`,
+    });
+  }
+  next();
+}
+
+async function unknownStatus (req, res, next) {
+  const status = req.body.data.status;
+
+  if(status === "unknown"){
+    return next({
+      status: 400,
+      message: `Reservation status is unknown`,
+    });
+  }
+  next();
+}
+
+async function statusFinished (req, res, next) {
+  const { status } = res.locals.reservation;
+  if(status === "finished"){
+    return next({
+      status: 400,
+      message: `${status} reservation cannot be updated`,
+    });
+  }
+  next();
+
+}
+
 //---Router functions---//
 
 async function list(req, res) {
@@ -162,8 +198,6 @@ async function list(req, res) {
     const data = await service.list();
     res.json({ data });
   }
-
-
 
 }
 
@@ -182,6 +216,14 @@ async function read(req, res, next) {
   
 }
 
+
+async function update(req, res){
+  const reservation_id = res.locals.reservation.reservation_id
+  const { status } = req.body.data;
+  const data = await service.update(reservation_id, status);
+  res.status(200).json({ data: { status } });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -193,10 +235,17 @@ module.exports = {
     isNotInPast,
     isValidTime,
     isRestaurantOpen,
+    validStatus,
     asyncErrorBoundary(create),
   ],
   read:[
     reservationExists,
     asyncErrorBoundary(read),
+  ],
+  update: [
+    reservationExists,
+    unknownStatus,
+    statusFinished,
+    asyncErrorBoundary(update),
   ]
 };
