@@ -139,7 +139,17 @@ function isNotOccupied (req, res, next){
 }
 
 
+async function reservationAlreadySeated(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "seated") {
+    return next({
+      status: 400,
+      message: `This reservations is already seated.`,
+    });
+  }
+next();
 
+}
 
 
 
@@ -178,7 +188,8 @@ async function read(req, res, next) {
 //DELETE method. will delete the reservation for a specific table
 async function deleteTableReservation(req, res) {
   const { tableId } = req.params;
-  const data = await service.delete(tableId);
+  const reservationId = res.locals.table.reservation_id;
+  const data = await service.delete(reservationId, tableId);
   res.status(200).json({ data });
 }
 
@@ -198,6 +209,7 @@ async function deleteTableReservation(req, res) {
       reservationExists,
       sufficientCapacity,
       isOccupied,
+      reservationAlreadySeated,
       asyncErrorBoundary(update),
     ],
     delete: [tableExists, isNotOccupied, asyncErrorBoundary(deleteTableReservation)],

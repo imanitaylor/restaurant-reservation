@@ -18,6 +18,7 @@ function create(table) {
 function update(reservationId, tableId) {
   return knex("reservations")
     .where({ reservation_id: reservationId })
+    .update({ status: "seated" })
     .then(() => {
       return knex("tables")
         .where({ table_id: tableId })
@@ -39,11 +40,16 @@ function readReservation(reservationId) {
       .first();
 }
 
-function deleteTableReservation(tableId) {
-  return knex("tables").where({ table_id: tableId })
-  .update({ reservation_id: null })
-  .returning("*")
-
+function deleteTableReservation(reservationId, tableId) {
+  return knex("reservations")
+    .where({ reservation_id: reservationId })
+    .update({ status: "finished" })
+    .then(() => {
+      return knex("tables")
+        .where({ table_id: tableId })
+        .update({ reservation_id: null })
+        .returning("*");
+    });
 }
 
 
