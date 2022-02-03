@@ -17,6 +17,7 @@ function listReservationsOnDate(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
+    .whereNot({status: "finished"})
     .orderBy("reservation_time");
 }
 
@@ -27,9 +28,20 @@ function read(reservationId) {
 }
 
 
+//PUT method to update the status of a reservation
+function update(reservationId, status){
+  return knex("reservations")
+  .where({ reservation_id: reservationId })
+  .update({ status: status })
+  .returning("*");
+
+}
+
+
 module.exports = {
   list,
   listReservationsOnDate,
   create,
   read,
+  update,
 };
