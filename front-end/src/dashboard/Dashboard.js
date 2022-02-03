@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
-import { listTables, deleteTableReservation } from "../utils/api";
+import { listTables, deleteTableReservation, changeReservationStatus } from "../utils/api";
 import useQuery from "../utils/useQuery";
 import { previous, next, today, formatAsTime } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
@@ -46,17 +46,7 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }
 
-  // const handleDelete = (tableId) => {
-  //   const result = window.confirm(
-  //     "Is this table ready to seat new guests? \n\nThis can not be undone."
-  //   );
-  //   if (result === true) {
-  //     deleteTable(tableId).then(history.push("/"));
-  //   }
-  // };
-
-
-  async function handleDelete(tableId) {
+  async function handleDelete(tableId, reservationId, newStatus) {
     const ac = new AbortController();
     setError(null);
 
@@ -81,17 +71,38 @@ if (result === true) {
   }
 
         
-      const reservsRows = reservations.map(({reservation_id, first_name, last_name, mobile_number, reservation_time, reservation_date, people}, index) => (
-        <tr key={index}>
-            <td>{reservation_id}</td>
-            <td>{first_name}</td>
-            <td>{last_name}</td>
-            <td>{mobile_number}</td>
-            <td>{formatAsTime(reservation_time)}</td>
-            <td>{reservation_date}</td>
-            <td>{people}</td>
-            <td><a type="button" className="btn btn-primary m-2" href={`/reservations/${reservation_id}/seat`}>Seat</a></td>
+
+  async function handleSeated(reservationId) {
+    const ac = new AbortController();
+    setError(null);
+  try {
+      await changeReservationStatus(
+        reservationId,
+        ac.signal
+      );
+      loadDashboard();
+    } catch (error) {
+      setError(error);
+    }
+    
+    return () => ac.abort();
+  }
+
+      const reservsRows = reservations.map(( reservation, index) => (
+       <>{ reservation.status !== "finished" && 
+            <tr key={index}>
+            <td>{reservation.reservation_id}</td>
+            <td>{reservation.first_name}</td>
+            <td>{reservation.last_name}</td>
+            <td>{reservation.mobile_number}</td>
+            <td>{formatAsTime(reservation.reservation_time)}</td>
+            <td>{reservation.reservation_date}</td>
+            <td>{reservation.people}</td>
+            <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
+            {reservation.status === "booked"&& (<td><a className="btn btn-primary m-2" onClick={() => handleSeated(reservation.reservation_id)} href={`/reservations/${reservation.reservation_id}/seat`}>Seat</a></td>)}
             </tr>
+            }       
+            </>
         ));
 
           const currentReservations = (
@@ -105,6 +116,7 @@ if (result === true) {
                   <th>Reservation Time</th>
                   <th>Reservation Date</th>
                   <th>Party Size</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>{reservsRows}</tbody>
@@ -118,7 +130,7 @@ if (result === true) {
                 <td>{table.table_name}</td>
                 <td>{table.capacity}</td>
                 <td data-table-id-status={table.table_id}>{table.reservation_id ? "Occupied" : "Free"}</td>
-                <td> {table.reservation_id && <button type="button" data-table-id-finish={table.table_id} onClick={() => handleDelete(table.table_id)}>Finish</button>}</td>
+                <td> {table.reservation_id && (<button type="button" className="btn btn-primary m-2" data-table-id-finish={table.table_id} onClick={() => handleDelete(table.table_id, table.reservation_id)}>Finish</button>)}</td>
             </tr>
             ));
 
