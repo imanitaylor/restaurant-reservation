@@ -171,3 +171,24 @@ export async function listReservations(params, signal) {
   };
   return await fetchJson(url, options);
 }
+
+
+/**
+ * This updates a reservations status
+ * @param reservationId
+ * the reservation that is being updated
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the saved table.
+ */
+ export async function changeReservationStatus(reservationId, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservationId}/status`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: {}}),
+    signal,
+  };
+  return await fetchJson(url, options);
+}
