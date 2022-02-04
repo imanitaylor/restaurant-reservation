@@ -189,15 +189,22 @@ async function statusFinished (req, res, next) {
 
 async function list(req, res) {
   let date = req.query.date;
+  let mobile_number = req.query.mobile_number;
 
   if (date){
     const data = await service.listReservationsOnDate(date);
+    res.json({ data });
+  }
+  else if (mobile_number){
+    const data = await service.listReservationsWithMobile(mobile_number);
     res.json({ data });
   }
   else {
     const data = await service.list();
     res.json({ data });
   }
+
+
 
 }
 
