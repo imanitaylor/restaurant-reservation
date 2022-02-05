@@ -1,14 +1,25 @@
+/**
+ * Component used/displayed in the EditReservation and CreateNewReservation components
+ * 
+ * The form includes: first name, last name, mobile number, number of people and a drop down to pick an appropriate date and time
+ * 
+ * If the user clicks "submit":
+      - the (new or already existing) reservation is submitted & saved
+      - then navigates to /dashboard & shows the users reservation
+ * 
+ */
+
 import React from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
-function ReservationForm({error, handleChange, handleSubmit, formData,}) {
+function ReservationForm({ error, handleChange, handleSubmit, formData }) {
   const history = useHistory();
-
 
   return (
     <div>
       <ErrorAlert error={error} />
+
       <form onSubmit={handleSubmit}>
         <div className="row">
           <label htmlFor="first_name" className="col">
