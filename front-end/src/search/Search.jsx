@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import ReservationsList from "../reservations/ReservationsList";
 
 function Search() {
   
@@ -35,42 +35,6 @@ function Search() {
     
     return () => ac.abort();
   }
-
-
-  const reservsRows = reservations.map(( reservation, index) => (
-    <>
-         <tr key={index}>
-         <td>{reservation.reservation_id}</td>
-         <td>{reservation.first_name}</td>
-         <td>{reservation.last_name}</td>
-         <td>{reservation.mobile_number}</td>
-         <td>{reservation.reservation_time}</td>
-         <td>{reservation.reservation_date}</td>
-         <td>{reservation.people}</td>
-         <td data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>
-         </tr>      
-         </>
-     ));
-
-
-
-     const currentReservations = (
-      <table>
-        <thead>
-          <tr>
-            <th>Reservation Number</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Phone Number</th>
-            <th>Reservation Time</th>
-            <th>Reservation Date</th>
-            <th>Party Size</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>{reservsRows}</tbody>
-      </table>
-    );
 
 
 
@@ -108,7 +72,7 @@ function Search() {
       </form>
       </div>
       <div className="row">
-       { reservations.length ? <div className="db-left">{currentReservations}</div> : <h2 className="m-5">No reservations found</h2> }
+       { reservations.length ? <div className="db-left"><ReservationsList reservations={reservations}/></div> : <h2 className="m-5">No reservations found</h2> }
       </div>
     </div>
   )
