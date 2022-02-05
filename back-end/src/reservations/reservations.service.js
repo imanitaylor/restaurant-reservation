@@ -8,41 +8,52 @@ function create(reservation) {
     .then((newReservations) => newReservations[0]);
 }
 
-//GET, read all reservations
+//GET, lists all reservations
 function list() {
   return knex("reservations").select("*").orderBy("reservation_time");
 }
 
+//GET, lists reservations that are not finished or cancelled on a specific date
 function listReservationsOnDate(date) {
   return knex("reservations")
     .select("*")
     .where({ reservation_date: date })
-    .whereNot({status: "finished"})
+    .whereNot({ status: "finished" })
+    .whereNot({ status: "cancelled" })
     .orderBy("reservation_time");
 }
 
-function listReservationsWithMobile(mobile_number){
+//GET, lists all reservations that match a searched number
+function listReservationsWithMobile(mobile_number) {
   return knex("reservations")
     .select("*")
-    .whereRaw("translate(mobile_number, '() -', '') like ?",`%${mobile_number.replace(/\D+/g, "")}%`)
+    .whereRaw(
+      "translate(mobile_number, '() -', '') like ?",
+      `%${mobile_number.replace(/\D+/g, "")}%`
+    )
     .orderBy("reservation_time");
 }
 
-//GET method to read a reservation for a specific reservationId
+//GET, reads a reservation for a specific reservationId
 function read(reservationId) {
   return knex("reservations").where({ reservation_id: reservationId }).first();
 }
 
-
-//PUT method to update the status of a reservation
-function update(reservationId, status){
+//PUT, updates just the status of a reservation
+function updateStatus(reservationId, status) {
   return knex("reservations")
-  .where({ reservation_id: reservationId })
-  .update({ status: status })
-  .returning("*");
-
+    .where({ reservation_id: reservationId })
+    .update({ status: status })
+    .returning("*");
 }
 
+//PUT, updates whatever field the user would like to change
+function update(updatedReservation) {
+  return knex("reservations")
+    .where({ reservation_id: updatedReservation.reservation_id })
+    .update(updatedReservation, "*")
+    .then((res) => res[0]);
+}
 
 module.exports = {
   list,
@@ -50,5 +61,6 @@ module.exports = {
   listReservationsWithMobile,
   create,
   read,
+  updateStatus,
   update,
 };
