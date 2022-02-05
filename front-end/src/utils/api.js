@@ -180,7 +180,7 @@ export async function listReservations(params, signal) {
  * @param signal
  *  optional AbortController.signal
  * @returns {Promise<reservation>}
- *  a promise that resolves the saved table.
+ *  a promise that resolves the saved reservation.
  */
  export async function changeReservationStatus(reservationId, signal) {
   const url = `${API_BASE_URL}/reservations/${reservationId}/status`;
@@ -191,4 +191,45 @@ export async function listReservations(params, signal) {
     signal,
   };
   return await fetchJson(url, options);
+}
+
+
+/**
+ * Reads a reservation to the database.
+ * @param reservation_id
+ *  * Takes in a reservation_id
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the saved reservation.
+ */
+export async function readReservation(reservation_id, signal) {
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+  const options = {
+    method: "GET",
+    headers,
+    signal,
+  };
+  return await fetchJson(url, options);
+}
+
+
+/**
+ * This updates a reservations
+ * @param reservation
+ * the new reservation information that is being updated
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<reservation>}
+ *  a promise that resolves the saved reservation.
+ */
+export async function updateReservation(reservation, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation.reservation_id}`);
+  return await fetchJson(url, {
+    headers,
+    signal,
+    method: 'PUT',
+    body: JSON.stringify({data: reservation}),
+  })
+
 }
