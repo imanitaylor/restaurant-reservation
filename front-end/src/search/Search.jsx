@@ -46,7 +46,7 @@ function Search() {
       <h1 style={{color:"#284b63"}}>Search Reservations</h1>
       <ErrorAlert error={error} />
       <div className="row">
-        <form onSubmit={handleSubmit} className="col-12">
+        <form onSubmit={handleSubmit} className="col-md-8">
           <h3>Find a reservation:</h3>
 
           <label htmlFor="mobile_number" className="col-4 m-4">
