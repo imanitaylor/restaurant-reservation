@@ -1,6 +1,63 @@
-.side-bar {
-  background-color: #284b63;
-  min-width: 400px;
+* {
+  font-family: 'Roboto Slab', serif;
+}
+
+.group {
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  margin: 20px;
+}
+
+
+.menu {
+  background-color: #284b63;
+  padding: 20px 20px 5px 20px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.routes{
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+
+h1{
+  font-size: 60px;
+}
+
+h3{
+  font-size: 35px;
+}
+
+/* -------  Media Query ------- */
+@media all and (min-width: 760px){
+  
+  .group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .menu {
+    background-color: #284b63;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .routes{
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+
 }

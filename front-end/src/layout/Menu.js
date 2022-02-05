@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 
 function Menu() {
   return (
+    <header className="group">
     <nav className="navbar navbar-dark align-items-start p-0">
       <div className="container-fluid d-flex flex-column p-0">
         <Link
@@ -17,7 +18,7 @@ function Menu() {
           to="/"
         >
           <div className="sidebar-brand-text mx-3">
-            <h3>Reservations Manager</h3>
+            <h3 className="logo">Reservations Manager</h3>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
@@ -56,6 +57,7 @@ function Menu() {
         </div>
       </div>
     </nav>
+    </header>
   );
 }
 

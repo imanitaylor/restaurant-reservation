@@ -8,13 +8,11 @@
  */
 
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationsList from "../reservations/ReservationsList";
 
 function Search() {
-  const history = useHistory();
   const [mobileNumber, setMobileNumber] = useState("");
 
   const [reservations, setReservations] = useState([]);
@@ -45,11 +43,11 @@ function Search() {
     <div>
       <h1 style={{color:"#284b63"}}>Search Reservations</h1>
       <ErrorAlert error={error} />
-      <div className="row">
-        <form onSubmit={handleSubmit} className="col-md-8">
-          <h3>Find a reservation:</h3>
-
-          <label htmlFor="mobile_number" className="col-4 m-4">
+      <div>
+        <form onSubmit={handleSubmit} className="col">
+          <h4>Find a reservation:</h4>
+          <div className="row">
+          <label htmlFor="mobile_number" className="col-8 m-1 p-1">
             <input
               id="mobile_number"
               type="text"
@@ -61,18 +59,11 @@ function Search() {
               required
             />
           </label>
-          <button type="submit" className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-magnifying-glass" />
+          <button type="submit" className="btn m-1" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-magnifying-glass" />
               &nbsp;
             Find
           </button>
-          <button
-            type="button"
-            className="btn btn-danger m-2"
-            onClick={() => history.push("/dashboard")}
-          ><span className="oi oi-x" />
-          &nbsp;
-            Cancel
-          </button>
+          </div>
         </form>
       </div>
       <div className="row">
