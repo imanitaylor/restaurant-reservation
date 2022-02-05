@@ -54,13 +54,17 @@ function CreateSeatReservation() {
       <ErrorAlert error={error} />
 
       <div>
+        <h1 style={{color:"#284b63"}}>Seat A Reservation</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="table_id">
-            Seat at:
+
+            <h3>Please choose a table:</h3>
             <select
               id="table_id"
               name="table_id"
               onChange={handleChange}
+              style={{ width: "100%", fontSize:"20px" }}
+
               required
             >
               <option value="">-- Select an Option --</option>
@@ -72,14 +76,16 @@ function CreateSeatReservation() {
             </select>
           </label>
 
-          <button type="submit" className="btn btn-primary m-2">
+          <button type="submit" className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-check" />
+              &nbsp;
             Submit
           </button>
           <button
             type="button"
-            className="btn btn-secondary m-2"
+            className="btn btn-danger m-2"
             onClick={() => history.goBack()}
-          >
+          ><span className="oi oi-x" />
+          &nbsp;
             Cancel
           </button>
         </form>

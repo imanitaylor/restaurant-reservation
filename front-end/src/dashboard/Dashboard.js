@@ -47,11 +47,37 @@ function Dashboard({ date }) {
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
-      </div>
+      <h1 style={{color:"#284b63"}}>Dashboard</h1>
       <ErrorAlert error={error} />
+      <div className="d-md-flex mb-3">
+        <h3 className="mb-0" >Reservations for {date}</h3>
+      </div>
+      
+      <div className="row">
+        <button
+          type="button"
+          className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}
+          onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
+        ><span className="oi oi-media-skip-backward" />
+        &nbsp;
+          Prev
+        </button>
+        <button
+          type="button"
+          className="btn btn-secondary m-2"
+          onClick={() => history.push(`/dashboard`)}
+        >
+          Today
+        </button>
+        <button
+          type="button"
+          className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}
+          onClick={() => history.push(`/dashboard?date=${next(date)}`)}
+        >
+          Next &nbsp;<span className="oi oi-media-skip-forward" />
+        
+        </button>
+      </div>
       <div className="row">
         <div className="db-left">
           <ReservationsList reservations={reservations} />
@@ -60,29 +86,7 @@ function Dashboard({ date }) {
           <TablesList tables={tables} />
         </div>
       </div>
-      <div className="row">
-        <button
-          type="button"
-          className="btn btn-primary m-2"
-          onClick={() => history.push(`/dashboard?date=${previous(date)}`)}
-        >
-          Prev
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary m-2"
-          onClick={() => history.push(`/dashboard`)}
-        >
-          Today
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary m-2"
-          onClick={() => history.push(`/dashboard?date=${next(date)}`)}
-        >
-          Next
-        </button>
-      </div>
+      
     </main>
   );
 }

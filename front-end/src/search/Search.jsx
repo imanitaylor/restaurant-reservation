@@ -43,32 +43,34 @@ function Search() {
 
   return (
     <div>
-      <h1>Search Reservations</h1>
+      <h1 style={{color:"#284b63"}}>Search Reservations</h1>
       <ErrorAlert error={error} />
       <div className="row">
         <form onSubmit={handleSubmit} className="col-12">
-          <h4>Find a reservation:</h4>
+          <h3>Find a reservation:</h3>
 
-          <label htmlFor="mobile_number" className="col-3 m-4">
+          <label htmlFor="mobile_number" className="col-4 m-4">
             <input
               id="mobile_number"
               type="text"
               name="mobile_number"
-              style={{ width: "110%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               placeholder="Enter a customer's phone number"
               onChange={handleChange}
               value={mobileNumber}
               required
             />
           </label>
-          <button type="submit" className="btn btn-primary m-2">
+          <button type="submit" className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-magnifying-glass" />
+              &nbsp;
             Find
           </button>
           <button
             type="button"
-            className="btn btn-secondary m-2"
+            className="btn btn-danger m-2"
             onClick={() => history.push("/dashboard")}
-          >
+          ><span className="oi oi-x" />
+          &nbsp;
             Cancel
           </button>
         </form>

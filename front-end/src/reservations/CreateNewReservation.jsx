@@ -50,7 +50,7 @@ function CreateNewReservation() {
 
   return (
     <div>
-      <h1>Create A New Reservation</h1>
+      <h1 style={{color:"#284b63"}}>Create A New Reservation</h1>
       <ReservationForm
         error={error}
         handleChange={handleChange}
