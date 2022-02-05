@@ -26,7 +26,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>First Name</h4>
             <input
               id="first_name"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="text"
               name="first_name"
               placeholder="First Name"
@@ -39,7 +39,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>Last Name</h4>
             <input
               id="last_name"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="text"
               name="last_name"
               placeholder="Last Name"
@@ -52,7 +52,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>Mobile Number</h4>
             <input
               id="name"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="text"
               name="mobile_number"
               placeholder="xxx-xxx-xxxx"
@@ -68,7 +68,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>Date</h4>
             <input
               id="reservation_date"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="date"
               name="reservation_date"
               pattern="\d{4}-\d{2}-\d{2}"
@@ -81,7 +81,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>Time</h4>
             <input
               id="reservation_time"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="time"
               name="reservation_time"
               pattern="[0-9]{2}:[0-9]{2}"
@@ -94,7 +94,7 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
             <h4>Party Size</h4>
             <input
               id="people"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="number"
               name="people"
               min={1}
@@ -106,14 +106,16 @@ function ReservationForm({ error, handleChange, handleSubmit, formData }) {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary m-2">
+          <button type="submit" className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-check" />
+              &nbsp;
             Submit
           </button>
           <button
             type="button"
-            className="btn btn-secondary m-2"
+            className="btn btn-danger m-2"
             onClick={() => history.push("/")}
-          >
+          ><span className="oi oi-x" />
+          &nbsp;
             Cancel
           </button>
         </div>

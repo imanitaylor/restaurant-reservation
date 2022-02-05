@@ -1,4 +1,6 @@
 .side-bar {
-  background-color: #393a44;
-  min-width: 200px;
+  background-color: #284b63;
+  min-width: 400px;
+  display: flex;
+  height: 100vh;
 }

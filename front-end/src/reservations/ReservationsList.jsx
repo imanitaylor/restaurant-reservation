@@ -63,30 +63,33 @@ function ReservationsList({ reservations }) {
           <>
             <td className="border-0">
               <a
-                className="btn btn-primary m-2"
+                className="btn btn-secondary m-2"
                 onClick={() => handleSeated(reservation.reservation_id)}
                 href={`/reservations/${reservation.reservation_id}/seat`}
-              >
+              ><span className="oi oi-person" />
+              &nbsp;
                 Seat
               </a>
             </td>
             <td className="border-0">
               <a
-                className="btn btn-primary m-2"
+                className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}
                 onClick={() =>
                   history.push(`/reservations/:reservation_id/edit`)
                 }
                 href={`/reservations/${reservation.reservation_id}/edit`}
-              >
+              ><span className="oi oi-pencil" />
+              &nbsp;
                 Edit
               </a>
             </td>
             <td className="border-0">
               <button
-                className="btn btn-primary m-2"
+                className="btn btn-danger m-2"
                 onClick={() => handleCancel(reservation.reservation_id)}
                 data-reservation-id-cancel={reservation.reservation_id}
-              >
+              ><span className="oi oi-x" />
+              &nbsp;
                 Cancel
               </button>
             </td>
@@ -100,9 +103,9 @@ function ReservationsList({ reservations }) {
     <div>
       <ErrorAlert error={error} />
 
-      <table className="table no-wrap">
+      <table className="table" style={{fontSize:"18px"}}>
         <thead className="thead">
-          <tr>
+          <tr style={{color: "#284b63", background:"#d9d9d9"}}>
             <th className="border-bottom-0">Reservation Number</th>
             <th className="border-bottom-0">First Name</th>
             <th className="border-bottom-0">Last Name</th>

@@ -48,10 +48,11 @@ function TablesList({ tables }) {
         {table.reservation_id && (
           <button
             type="button"
-            className="btn btn-primary m-2"
+            className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}
             data-table-id-finish={table.table_id}
             onClick={() => handleDelete(table.table_id, table.reservation_id)}
-          >
+          ><span className="oi oi-check" />
+          &nbsp;
             Finish
           </button>
         )}
@@ -63,9 +64,9 @@ function TablesList({ tables }) {
     <div>
       <ErrorAlert error={error} />
 
-      <table className="table">
+      <table className="table" style={{fontSize:"18px"}}>
         <thead>
-          <tr>
+          <tr style={{color: "#284b63", background:"#d9d9d9"}}>
             <th className="border-bottom-0">Table ID</th>
             <th className="border-bottom-0">Table Name</th>
             <th className="border-bottom-0">Capacity</th>

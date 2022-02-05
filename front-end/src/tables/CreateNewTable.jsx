@@ -45,7 +45,7 @@ function CreateNewTable() {
 
   return (
     <div>
-      <h1>Create A New Table</h1>
+      <h1 style={{color:"#284b63"}}>Create A New Table</h1>
       <ErrorAlert error={error} />
       <form onSubmit={handleSubmit}>
         <div className="row">
@@ -53,7 +53,7 @@ function CreateNewTable() {
             <h4>Table Name</h4>
             <input
               id="table_name"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="text"
               name="table_name"
               placeholder="Table Name"
@@ -66,7 +66,7 @@ function CreateNewTable() {
             <h4>Table Capacity</h4>
             <input
               id="capacity"
-              style={{ width: "100%" }}
+              style={{ width: "100%", fontSize:"20px" }}
               type="number"
               name="capacity"
               min={1}
@@ -78,14 +78,16 @@ function CreateNewTable() {
         </div>
 
         <div>
-          <button type="submit" className="btn btn-primary m-2">
+          <button type="submit" className="btn m-2" style={{backgroundColor: "#284b63", color:"#ffffff"}}><span className="oi oi-check" />
+          &nbsp;
             Submit
           </button>
           <button
             type="button"
-            className="btn btn-secondary m-2"
+            className="btn btn-danger m-2"
             onClick={() => history.goBack()}
-          >
+          ><span className="oi oi-x" />
+          &nbsp;
             Cancel
           </button>
         </div>
