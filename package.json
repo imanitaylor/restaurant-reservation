@@ -1,11 +1,11 @@
 {
-  "name": "restaurant-reservation-manager",
+  "name": "starter-restaurant-reservation",
   "version": "1.0.0",
-  "description": "Restaurant reservation manager",
+  "description": "Starter project restaurant reservation system",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/imanitaylor/restaurant-reservation"
+    "url": "https://github.com/Thinkful-Ed/starter-restaurant-reservation"
   },
   "scripts": {
     "build": "npm -prefix front-end run build",
@@ -14,7 +14,7 @@
     "start": "npx concurrently 'npm run start:backend' 'npm run start:frontend'",
     "start:backend": "npm --prefix ./back-end start",
     "start:frontend": "npm --prefix ./front-end start",
-    "start:dev": "npx concurrently \"npm run start:dev --prefix ./back-end\" \"npm start --prefix ./front-end\" ",
+    "start:dev": "npx concurrently 'npm run start:dev --prefix ./back-end' 'npm start --prefix ./front-end'",
     "test": "npm run test:frontend && npm run test:backend",
     "test:backend": "npm test --prefix ./back-end",
     "test:frontend": "npm test --prefix ./front-end",
@@ -46,6 +46,9 @@
     "test:frontend:watch": "npm test --prefix ./front-end"
   },
   "keywords": [],
-  "author": "Imani Taylor",
-  "license": "UNLICENSED"
+  "author": "Thinkful, Inc.",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
 }
