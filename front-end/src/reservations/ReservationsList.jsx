@@ -47,8 +47,8 @@ function ReservationsList({ reservations }) {
   }
 
   const reservsRows = reservations.map((reservation) => (
-    <>
-      <tr key={reservation.reservation_id}>
+    <div key={reservation.reservation_id}>
+      <tr>
         <td>{reservation.reservation_id}</td>
         <td>{reservation.first_name}</td>
         <td>{reservation.last_name}</td>
@@ -96,7 +96,7 @@ function ReservationsList({ reservations }) {
           </>
         )}
       </tr>
-    </>
+    </div>
   ));
 
   return (
